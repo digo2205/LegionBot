@@ -8,7 +8,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 -->
 <div align="center">
 
-  <img src="assets/logo.png" alt="logo" width="200" height="auto" />
+  <img src="logo.png" alt="logo" width="200" height="auto" />
   <h1>Legion Discord Bot</h1>
   
   <p>
