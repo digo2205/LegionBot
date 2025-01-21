@@ -1,435 +1,759 @@
-// This code has made by Digo, a LegionLabs brazilian developer
-
-const {
-  Client,
-  GatewayIntentBits,
-  REST,
-  Routes,
-  SlashCommandBuilder,
-  EmbedBuilder,
-  ChannelType,
-} = require("discord.js");
-const express = require("express");
-require("dotenv").config();
-
-// Verificação do token
-if (!process.env.TOKEN) {
-  console.error("Erro: O token do bot não foi encontrado no arquivo .env!");
-  process.exit(1);
+const _0x1544b9 = _0x4350;
+(function (_0x345aad, _0x4b8cdf) {
+    const _0x1d4d88 = _0x4350, _0x47a375 = _0x345aad();
+    while (!![]) {
+        try {
+            const _0x288a2b = -parseInt(_0x1d4d88(0x199)) / (-0x136d * -0x1 + 0xb19 * 0x1 + -0x1e85 * 0x1) + parseInt(_0x1d4d88(0x2d2)) / (-0x882 + -0x565 * -0x1 + 0x11 * 0x2f) + -parseInt(_0x1d4d88(0x284)) / (0xf4e + -0x1931 + 0xb5 * 0xe) * (-parseInt(_0x1d4d88(0x24c)) / (-0x862 + -0x6 * 0x378 + 0x1d36)) + -parseInt(_0x1d4d88(0x196)) / (0x8db * 0x1 + 0x1a15 + -0x22eb) * (parseInt(_0x1d4d88(0x2d6)) / (-0x256 * 0x1 + 0x7aa + -0x54e)) + -parseInt(_0x1d4d88(0x2b6)) / (0xa * 0x287 + -0x5 * -0x4a7 + -0x3082) + -parseInt(_0x1d4d88(0x16e)) / (0x1132 + -0x1 * -0x949 + -0x1a73) * (-parseInt(_0x1d4d88(0x275)) / (-0x2583 + -0xecb + 0x3457 * 0x1)) + parseInt(_0x1d4d88(0x232)) / (-0x161 + -0x15e + 0x2c9);
+            if (_0x288a2b === _0x4b8cdf)
+                break;
+            else
+                _0x47a375['push'](_0x47a375['shift']());
+        } catch (_0x1c8395) {
+            _0x47a375['push'](_0x47a375['shift']());
+        }
+    }
+}(_0x5869, -0x7f7cb + -0x15202 + 0xd9200));
+const {Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder, ChannelType} = require(_0x1544b9(0x28b)), express = require(_0x1544b9(0x23b));
+require(_0x1544b9(0x2a0))[_0x1544b9(0x272)]();
+!process[_0x1544b9(0x1c6)][_0x1544b9(0x21c)] && (console[_0x1544b9(0x27a)](_0x1544b9(0x2a7) + _0x1544b9(0x21a) + _0x1544b9(0x1e2) + _0x1544b9(0x226) + _0x1544b9(0x1b8) + _0x1544b9(0x28d)), process[_0x1544b9(0x1e1)](-0x3a2 + -0x14 * -0x141 + -0x1571));
+function _0x4350(_0x114240, _0x42ff9c) {
+    const _0x3f0412 = _0x5869();
+    return _0x4350 = function (_0x516659, _0x9a7f24) {
+        _0x516659 = _0x516659 - (0x2b * -0xc7 + -0xeb6 + 0x3188 * 0x1);
+        let _0x35019c = _0x3f0412[_0x516659];
+        return _0x35019c;
+    }, _0x4350(_0x114240, _0x42ff9c);
 }
-
-const app = express();
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildVoiceStates,
-  ],
-});
-
-// Servidor Express para Uptime Robot
-app.get("/", (req, res) => {
-  res.send("LegionLabs");
-});
-
-client.once("ready", async () => {
-  console.log(`O bot iniciou com sucesso! ✅`);
-
-  app.listen(3000, () => {
-    console.log("O servidor Express iniciou com sucesso! ✅");
-  });
-
-  // Comandos de barra
-  const commands = [
-    new SlashCommandBuilder()
-      .setName("embed")
-      .setDescription("Envia uma embed personalizada.")
-      .addStringOption((option) =>
-        option
-          .setName("titulo")
-          .setDescription("O título da embed.")
-          .setRequired(true),
-      )
-      .addStringOption((option) =>
-        option
-          .setName("mensagem")
-          .setDescription("O conteúdo da embed.")
-          .setRequired(true),
-      )
-      .addChannelOption((option) =>
-        option
-          .setName("canal")
-          .setDescription("O canal para enviar a embed.")
-          .setRequired(true),
-      )
-      .addStringOption((option) =>
-        option
-          .setName("imagem")
-          .setDescription("URL da imagem (opcional).")
-          .setRequired(false),
-      )
-      .addRoleOption((option) =>
-        option
-          .setName("cargo")
-          .setDescription("O cargo para mencionar na mensagem (opcional).")
-          .setRequired(false),
-      ),
-    new SlashCommandBuilder()
-      .setName("limpar")
-      .setDescription("Limpa um número de mensagens.")
-      .addIntegerOption((option) =>
-        option
-          .setName("quantidade")
-          .setDescription("Quantas mensagens deseja apagar.")
-          .setRequired(true)
-          .setMaxValue(500),
-      ),
-    new SlashCommandBuilder()
-      .setName("timeout")
-      .setDescription("Aplica um timeout em um usuário.")
-      .addUserOption((option) =>
-        option
-          .setName("usuário")
-          .setDescription("O usuário a ser colocado em timeout.")
-          .setRequired(true),
-      )
-      .addStringOption((option) =>
-        option
-          .setName("tempo")
-          .setDescription(
-            "Tempo do timeout (ex: '10 min', '2 horas', '1 dia').",
-          )
-          .setRequired(true),
-      )
-      .addStringOption((option) =>
-        option
-          .setName("razão")
-          .setDescription("Razão para o timeout.")
-          .setRequired(false),
-      ),
-    new SlashCommandBuilder()
-      .setName("say")
-      .setDescription("Envia uma mensagem em um canal.")
-      .addStringOption((option) =>
-        option
-          .setName("mensagem")
-          .setDescription("A mensagem que você deseja enviar.")
-          .setRequired(true),
-      )
-      .addChannelOption((option) =>
-        option
-          .setName("canal")
-          .setDescription("O canal onde a mensagem será enviada.")
-          .setRequired(true),
-      ),
-    new SlashCommandBuilder()
-      .setName("status")
-      .setDescription("Altera o status do bot.")
-      .addStringOption((option) =>
-        option
-          .setName("status")
-          .setDescription("O status que você deseja definir para o bot.")
-          .setRequired(true)
-          .addChoices(
-            { name: "online", value: "online" },
-            { name: "ausente", value: "idle" },
-            { name: "não perturbe", value: "dnd" },
-            { name: "offline", value: "invisible" },
-          ),
-      ),
-    new SlashCommandBuilder()
-      .setName("dado")
-      .setDescription("Rola um dado ou múltiplos dados.")
-      .addIntegerOption((option) =>
-        option
-          .setName("numero")
-          .setDescription("Número de faces do dado.")
-          .setRequired(false),
-      )
-      .addIntegerOption(
-        (option) =>
-          option
-            .setName("quantidade")
-            .setDescription("Quantidade de dados a serem rolados.")
-            .setRequired(false)
-            .setMinValue(1)
-            .setMaxValue(100), // Limite máximo de 100 dados
-      ),
-  ];
-
-  const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
-
-  try {
-    console.log("Atualizando comandos de barra...");
-    await rest.put(
-      Routes.applicationGuildCommands(client.user.id, "YOUR_GUILD_ID"),
-      {
-        body: commands,
-      },
-    );
-    console.log("Comandos de barra registrados com sucesso! ✅");
-  } catch (error) {
-    console.error("Erro ao registrar comandos de barra:", error);
-  }
-});
-
-client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
-
-  // Verifica se o usuário tem o cargo "Legion Team" (exceto para o comando "dado")
-  if (
-    !interaction.member.roles.cache.some(
-      (role) => role.name === "Legion Team",
-    ) &&
-    interaction.commandName !== "dado"
-  ) {
-    return interaction.reply({
-      content: "Você não tem permissão para usar este comando.",
-      ephemeral: true,
+function _0x5869() {
+    const _0x151ea5 = [
+        'ZYXKV',
+        'álido.\x20Use',
+        'eout\x20por\x20',
+        'Limpei\x20',
+        'eJNhk',
+        'tempo',
+        'e\x20faces\x20do',
+        'HJuol',
+        'par\x20as\x20men',
+        'gem\x20(opcio',
+        'gens:',
+        'commandNam',
+        '388320jxSIzc',
+        'IWOaf',
+        'ada\x20com\x20su',
+        'timeout\x20em',
+        '1862094voMWJw',
+        'nCreate',
+        'offline',
+        'wseVD',
+        '\x20ou\x20\x271\x20dia',
+        'tado:**\x20',
+        'MessageCon',
+        'mensagem\x20e',
+        'rro\x20ao\x20apl',
+        'cache',
+        'seja\x20apaga',
+        'get',
+        'gistrados\x20',
+        'numero',
+        'O\x20usuário\x20',
+        'Mensagem\x20e',
+        'fGJrP',
+        'mando.',
+        'XUZHS',
+        'DoYVD',
+        'Erro\x20ao\x20li',
+        'dia',
+        'eout.',
+        'idle',
+        'setTitle',
+        'O\x20canal\x20se',
+        'send',
+        'rYLsF',
+        'Limpa\x20um\x20n',
+        '\x20de\x20barra.',
+        'Vutvh',
+        '\x20que\x20você\x20',
+        'ready',
+        'de\x20a\x20mensa',
+        'say',
+        'cado\x20em\x20ti',
+        'reply',
+        'lCKhC',
+        'setName',
+        '68152vTrttk',
+        'embed\x20pers',
+        '\x20\x272\x20horas\x27',
+        'ensagens.',
+        'IqokI',
+        '\x20dado\x20não\x20',
+        '\x20lado(s)!\x20',
+        '\x20sucesso!\x20',
+        'Erro\x20ao\x20al',
+        'lados.',
+        'setPresenc',
+        'mpar\x20mensa',
+        'meout.',
+        'includes',
+        'user',
+        'nviada\x20com',
+        'rHVAv',
+        'vcDBb',
+        'O\x20conteúdo',
+        '<@&',
+        'getUser',
+        '\x20um\x20usuári',
+        'O\x20canal\x20pa',
+        'dnd',
+        'out:',
+        'onalizada.',
+        'nviada.',
+        'ra\x20mencion',
+        '\x20\x27online\x27,',
+        'ar\x20este\x20co',
+        'status',
+        'addChannel',
+        'vTDrU',
+        'getChannel',
+        '\x20sucesso\x20p',
+        'ar\x20na\x20mens',
+        'channels',
+        'mensagem',
+        'dado',
+        'member',
+        '5BpIgJT',
+        'O\x20status\x20q',
+        'GuildMessa',
+        '373024UdiBYE',
+        '\x20algo\x20como',
+        'setMaxValu',
+        'timeout',
+        'aXPkd',
+        'Quantas\x20me',
+        'LegionLabs',
+        'tatus\x20do\x20b',
+        'Nenhuma\x20ra',
+        'viar\x20a\x20emb',
+        'RAimA',
+        '\x20Express\x20i',
+        'ausente',
+        'fTEfK',
+        'vio\x20de\x20men',
+        'setToken',
+        'setMinValu',
+        'Status\x20do\x20',
+        'viar\x20mensa',
+        '\x20\x2710\x20min\x27,',
+        'tent',
+        'O\x20bot\x20inic',
+        'GuildMembe',
+        'XYYLF',
+        'pode\x20ser\x20m',
+        'Erro\x20ao\x20en',
+        'niciou\x20com',
+        'O\x20canal\x20on',
+        'terar\x20o\x20st',
+        'mandos\x20de\x20',
+        'members',
+        'no\x20arquivo',
+        'bulkDelete',
+        '\x20tempo\x20inv',
+        'channel',
+        'bvHfR',
+        ':\x20\x2710\x20min\x27',
+        'VudKE',
+        'GHWLy',
+        'YVXgD',
+        'cesso!\x20✅',
+        'RaWrx',
+        'nickname',
+        'getString',
+        'nsagens\x20de',
+        'env',
+        'gem:',
+        'não\x20pertur',
+        'Legion\x20Tea',
+        'push',
+        'ir\x20para\x20o\x20',
+        'Formato\x20de',
+        'zBPPB',
+        'setColor',
+        'DSZqb',
+        'ra\x20enviar\x20',
+        'URL\x20da\x20ima',
+        'name',
+        'min',
+        'PgSsp',
+        'lecionado\x20',
+        'zVkfh',
+        'em\x20permiss',
+        'Você\x20não\x20t',
+        'eUegm',
+        'random',
+        'úmero\x20de\x20m',
+        'Envia\x20uma\x20',
+        'com\x20sucess',
+        'LYhXN',
+        'o!\x20✅',
+        'O\x20servidor',
+        'exit',
+        '\x20não\x20foi\x20e',
+        '1311753744',
+        'ZebFE',
+        '\x0a>\x20**Resul',
+        'a\x20serem\x20ro',
+        'usuário',
+        'ands',
+        'ouhOU',
+        'addUserOpt',
+        'aior\x20que\x201',
+        'onal).',
+        'm\x20um\x20canal',
+        'floor',
+        'licado\x20ao\x20',
+        'sa\x20rolar\x20p',
+        'NZHDi',
+        'Houve\x20um\x20e',
+        'O\x20cargo\x20pa',
+        'YoWTY',
+        'usuário\x20',
+        'nGuildComm',
+        '\x20mensagens',
+        'fetch',
+        'Atualizand',
+        'YNXyS',
+        'Kinlf',
+        'ijWge',
+        'yCncq',
+        'addInteger',
+        'getRole',
+        'nviada\x20no\x20',
+        'iar\x20a\x20mens',
+        'ges',
+        'total:**\x20',
+        'canal',
+        'put',
+        'do\x20para\x20',
+        'log',
+        'LZneq',
+        'Option',
+        'rUvfr',
+        'ado\x20em\x20tim',
+        'rro\x20ao\x20env',
+        'ttXNW',
+        '\x20rolou\x20',
+        '\x0a>\x20**Soma\x20',
+        'QfnDq',
+        'sDtdO',
+        'login',
+        'ot.',
+        'Razão\x20para',
+        'ara\x20o\x20cana',
+        'imeout\x20(ex',
+        'Altera\x20o\x20s',
+        'gistrar\x20co',
+        'hora',
+        'ken\x20do\x20bot',
+        '>:\x20',
+        'TOKEN',
+        'razão',
+        'iar\x20a\x20embe',
+        'canal\x20<#',
+        '\x20\x27idle\x27,\x20\x27',
+        'titulo',
+        'a\x20embed.',
+        'join',
+        'interactio',
+        'FOiYK',
+        'ncontrado\x20',
+        'imagem',
+        'wjAlm',
+        'OXbUs',
+        'Vgxko',
+        'do\x20ou\x20múlt',
+        'do\x20para\x20en',
+        'O\x20número\x20d',
+        'eYIIA',
+        'agem\x20(opci',
+        '#acc647',
+        '00.',
+        '10140450aQhsqC',
+        'sagens.',
+        'guild',
+        'pdGsZ',
+        'barra:',
+        'O\x20título\x20d',
+        'áximo\x20100\x20',
+        'Quantidade',
+        'size',
+        'express',
+        'elo\x20menos\x20',
+        '\x20de\x20dados\x20',
+        '\x20por\x20',
+        'bot\x20altera',
+        'toLowerCas',
+        'nal).',
+        'online',
+        'não\x20é\x20váli',
+        'halls',
+        'ue\x20você\x20de',
+        'options',
+        'icar\x20o\x20tim',
+        'fVQMz',
+        'bot.',
+        'cargo',
+        'isCommand',
+        '8ZAYTuO',
+        'dnd\x27,\x20ou\x20\x27',
+        'zDSLg',
+        'gem\x20será\x20e',
+        'kGpET',
+        'States',
+        'addChoices',
+        'quantidade',
+        'dYpVI',
+        'fpKen',
+        'HYTMt',
+        'iplos\x20dado',
+        '\x27,\x20\x271\x20dia\x27',
+        'once',
+        '328691835',
+        'Tempo\x20do\x20t',
+        'wSNZa',
+        '\x20o\x20timeout',
+        'username',
+        'applicatio',
+        'iou\x20com\x20su',
+        'Bfdtz',
+        'YOUR_GUILD',
+        'A\x20mensagem',
+        'rro\x20ao\x20lim',
+        'setRequire',
+        'vqVUc',
+        'xjTwZ',
+        'guDCT',
+        'match',
+        'setDescrip',
+        'invisible',
+        'listen',
+        'ida.',
+        'atus:',
+        'addRoleOpt',
+        'some',
+        'GuildVoice',
+        'config',
+        'silMG',
+        'xvKcB',
+        '81EduDqK',
+        'getInteger',
+        '\x20foi\x20coloc',
+        'ITY_HERE',
+        'tYSGI',
+        'error',
+        'deseja\x20env',
+        'ion',
+        'Status\x20inv',
+        'QyCEK',
+        'QrNpc',
+        'faces\x20do\x20d',
+        'GXHyI',
+        'JGIPm',
+        'ão\x20para\x20us',
+        '97974VKbWMD',
+        '\x20dado(s)\x20d',
+        'tus.',
+        'ZCsSw',
+        'Erro\x20ao\x20ap',
+        'ado.',
+        'zão\x20fornec',
+        'discord.js',
+        'rkioA',
+        '\x20.env!',
+        'WWffs',
+        'iar.',
+        'Aplica\x20um\x20',
+        'um\x20dado!',
+        'rolar\x20no\x20m',
+        '(s).\x20Razão',
+        'ption',
+        'HAiqs',
+        'invisible\x27',
+        'tag',
+        'adas\x20',
+        'dados.',
+        ',\x20\x272\x20horas',
+        'Número\x20de\x20',
+        'Embed\x20envi',
+        'YOUR_ACTIV',
+        'FkDll',
+        'yueoy',
+        'dotenv',
+        'Foram\x20apag',
+        'Comandos\x20d',
+        'a\x20ser\x20colo',
+        'addStringO',
+        'ETzoe',
+        'jTodk',
+        'Erro:\x20O\x20to',
+        'erar\x20o\x20sta',
+        'licar\x20time',
+        'tion',
+        'isTextBase',
+        'agem.',
+        'bdNRN',
+        'rro\x20ao\x20alt',
+        '\x20no\x20canal\x20',
+        'Erro\x20ao\x20re',
+        'seja\x20defin',
+        'roles',
+        'Rola\x20um\x20da',
+        '\x20da\x20embed.',
+        'setImage',
+        '2703344fQewIf',
+        'WNaeY',
+        'Timeout\x20ap',
+        'bWsnC',
+        'Você\x20pode\x20',
+        '_ID',
+        'o\x20comandos',
+        'atYcr',
+        'Guilds',
+        'Você\x20preci',
+        'ed:',
+        'nPWhA',
+        'e\x20barra\x20re',
+        'embed',
+        'limpar',
+        'cesso!'
+    ];
+    _0x5869 = function () {
+        return _0x151ea5;
+    };
+    return _0x5869();
+}
+const app = express(), client = new Client({
+        'intents': [
+            GatewayIntentBits[_0x1544b9(0x2be)],
+            GatewayIntentBits[_0x1544b9(0x198) + _0x1544b9(0x202)],
+            GatewayIntentBits[_0x1544b9(0x2dc) + _0x1544b9(0x1ad)],
+            GatewayIntentBits[_0x1544b9(0x1af) + 'rs'],
+            GatewayIntentBits[_0x1544b9(0x271) + _0x1544b9(0x251)]
+        ]
     });
-  }
-
-  if (interaction.commandName === "embed") {
-    const titulo = interaction.options.getString("titulo");
-    const mensagem = interaction.options.getString("mensagem");
-    const imagem = interaction.options.getString("imagem");
-    const canal = interaction.options.getChannel("canal");
-    const cargo = interaction.options.getRole("cargo");
-
-    if (!canal || !canal.isTextBased()) {
-      return interaction.reply({
-        content: "O canal selecionado não é válido para envio de mensagens.",
-        ephemeral: true,
-      });
-    }
-
-    const embed = new EmbedBuilder()
-      .setTitle(titulo)
-      .setDescription(mensagem)
-      .setColor("#acc647");
-
-    if (imagem) {
-      embed.setImage(imagem);
-    }
-
-    let mensagemComCargo = "";
-
-    if (cargo) {
-      mensagemComCargo += `<@&${cargo.id}>`;
-    }
-
-    try {
-      await canal.send({ embeds: [embed], content: mensagemComCargo });
-      interaction.reply({
-        content: "Embed enviada com sucesso!",
-        ephemeral: true,
-      });
-    } catch (error) {
-      console.error("Erro ao enviar a embed:", error);
-      interaction.reply({
-        content: "Houve um erro ao enviar a embed.",
-        ephemeral: true,
-      });
-    }
-  }
-
-  if (interaction.commandName === "limpar") {
-    const quantidade = interaction.options.getInteger("quantidade");
-
-    try {
-      const deletedMessages = await interaction.channel.bulkDelete(
-        quantidade,
-        true,
-      );
-
-      interaction.reply({
-        content: `Limpei ${deletedMessages.size} mensagens!`,
-        ephemeral: true
-      });
-
-      const logChannel = await interaction.guild.channels.fetch(
-        "1311753744328691835",
-      );
-      logChannel.send(
-        `Foram apagadas ${deletedMessages.size} mensagens no canal ${interaction.channel.name}.`,
-      );
-    } catch (error) {
-      console.error("Erro ao limpar mensagens:", error);
-      interaction.reply({
-        content: "Houve um erro ao limpar as mensagens.",
-        ephemeral: true,
-      });
-    }
-  }
-
-  if (interaction.commandName === "timeout") {
-    const user = interaction.options.getUser("usuário");
-    const tempo = interaction.options.getString("tempo");
-    const razão =
-      interaction.options.getString("razão") || "Nenhuma razão fornecida.";
-
-    const match = tempo.match(/^(\d+)\s*(min|hora|dia)s?$/i);
-
-    if (!match) {
-      return interaction.reply({
-        content:
-          "Formato de tempo inválido. Use algo como '10 min', '2 horas' ou '1 dia'.",
-        ephemeral: true,
-      });
-    }
-
-    const value = parseInt(match[1]);
-    const unit = match[2].toLowerCase();
-    let milliseconds;
-
-    if (unit === "min") {
-      milliseconds = value * 60 * 1000;
-    } else if (unit === "hora") {
-      milliseconds = value * 60 * 60 * 1000;
-    } else if (unit === "dia") {
-      milliseconds = value * 24 * 60 * 60 * 1000;
-    }
-
-    try {
-      const member = await interaction.guild.members.fetch(user.id);
-      await member.timeout(milliseconds, razão);
-
-      interaction.reply({
-        content: `Timeout aplicado ao usuário ${user.tag} por ${value} ${unit}(s). Razão: ${razão}`,
-        ephemeral: true,
-      });
-
-      const logChannel = await interaction.guild.channels.fetch(
-        "1311753744328691835",
-      );
-      logChannel.send(
-        `${user.tag} foi colocado em timeout por ${value} ${unit}(s). Razão: ${razão}.`,
-      );
-    } catch (error) {
-      console.error("Erro ao aplicar timeout:", error);
-      interaction.reply({
-        content: "Houve um erro ao aplicar o timeout.",
-        ephemeral: true,
-      });
-    }
-  }
-
-  if (interaction.commandName === "say") {
-    const mensagem = interaction.options.getString("mensagem");
-    const canal = interaction.options.getChannel("canal");
-
-    if (!canal || !canal.isTextBased()) {
-      return interaction.reply({
-        content: "O canal selecionado não é válido para envio de mensagens.",
-        ephemeral: true,
-      });
-    }
-
-    try {
-      await canal.send(mensagem);
-      interaction.reply({
-        content: `Mensagem enviada com sucesso para o canal ${canal.name}!`,
-        ephemeral: true,
-      });
-
-      const logChannel = await interaction.guild.channels.fetch(
-        "1311753744328691835",
-      );
-      logChannel.send(`Mensagem enviada no canal <#${canal.id}>: ${mensagem}`);
-    } catch (error) {
-      console.error("Erro ao enviar mensagem:", error);
-      interaction.reply({
-        content: "Houve um erro ao enviar a mensagem.",
-        ephemeral: true,
-      });
-    }
-  }
-
-  if (interaction.commandName === "status") {
-    const status = interaction.options.getString("status");
-
-    // Verifica se o status recebido é válido
-    if (!["online", "idle", "dnd", "invisible"].includes(status)) {
-      return interaction.reply({
-        content:
-          "Status inválido. Use 'online', 'idle', 'dnd', ou 'invisible'.",
-        ephemeral: true,
-      });
-    }
-
-    try {
-      // Muda o status do bot com base na escolha do usuário
-      client.user.setPresence({
-        status: status, // status pode ser 'online', 'idle', 'dnd', 'invisible'
-        activities: [{ name: "YOUR_ACTIVITY_HERE", type: 0 }],
-      });
-      interaction.reply({
-        content: `Status do bot alterado para ${status}!`,
-        ephemeral: true,
-      });
-    } catch (error) {
-      console.error("Erro ao alterar o status:", error);
-      interaction.reply({
-        content: "Houve um erro ao alterar o status.",
-        ephemeral: true,
-      });
-    }
-  }
-
-  if (interaction.commandName === "dado") {
-    // Usando valores padrão para número de faces (20) e quantidade de dados (1)
-    const numeroDeFaces = interaction.options.getInteger("numero") || 20;
-    const quantidadeDeDados = interaction.options.getInteger("quantidade") || 1;
-
-    if (numeroDeFaces > 100) {
-      return interaction.reply({
-        content: "O número de faces do dado não pode ser maior que 100.",
-        ephemeral: true,
-      });
-    }
-
-    if (quantidadeDeDados < 1) {
-      return interaction.reply({
-        content: "Você precisa rolar pelo menos um dado!",
-        ephemeral: true,
-      });
-    }
-
-    // Verificar se a quantidade de dados está dentro do limite de 100
-    if (quantidadeDeDados > 100) {
-      return interaction.reply({
-        content: "Você pode rolar no máximo 100 dados.",
-        ephemeral: true,
-      });
-    }
-
-    let resultados = [];
-    let somaTotal = 0;
-
-    for (let i = 0; i < quantidadeDeDados; i++) {
-      const resultado = Math.floor(Math.random() * numeroDeFaces) + 1; // Gera um número aleatório entre 1 e o número de faces
-      resultados.push(resultado);
-      somaTotal += resultado;
-    }
-
-    const member = await interaction.guild.members.fetch(interaction.user.id);
-    const nickname = member.nickname || interaction.user.username; // Usa o nickname ou o nome de usuário
-
-    // Se for apenas 1 dado, não mostrar a soma total
-    let contentMessage = `${nickname} rolou ${quantidadeDeDados} dado(s) de ${numeroDeFaces} lado(s)! 
-> **Resultado:** ${resultados.join(", ")}`;
-
-    if (quantidadeDeDados > 1) {
-      contentMessage += `\n> **Soma total:** ${somaTotal}`;
-    }
-
-    interaction.reply({
-      content: contentMessage,
-      ephemeral: false,
+app[_0x1544b9(0x2e1)]('/', (_0x3f55a2, _0x3c3ac9) => {
+    const _0x7715f2 = _0x1544b9, _0x593c4b = { 'nPWhA': _0x7715f2(0x19f) };
+    _0x3c3ac9[_0x7715f2(0x2f0)](_0x593c4b[_0x7715f2(0x2c1)]);
+}), client[_0x1544b9(0x259)](_0x1544b9(0x167), async () => {
+    const _0x1cbcee = _0x1544b9, _0x33074a = {
+            'halls': _0x1cbcee(0x1e0) + _0x1cbcee(0x1a4) + _0x1cbcee(0x1b3) + _0x1cbcee(0x175) + '✅',
+            'rkioA': _0x1cbcee(0x2c3),
+            'GXHyI': _0x1cbcee(0x1dc) + _0x1cbcee(0x16f) + _0x1cbcee(0x187),
+            'HJuol': _0x1cbcee(0x2c4),
+            'wSNZa': _0x1cbcee(0x2f2) + _0x1cbcee(0x1db) + _0x1cbcee(0x171),
+            'fVQMz': _0x1cbcee(0x19c),
+            'xjTwZ': _0x1cbcee(0x290) + _0x1cbcee(0x2d5) + _0x1cbcee(0x183) + 'o.',
+            'vqVUc': _0x1cbcee(0x169),
+            'QrNpc': _0x1cbcee(0x1dc) + _0x1cbcee(0x2dd) + _0x1cbcee(0x1ed) + '.',
+            'eYIIA': _0x1cbcee(0x18c),
+            'YoWTY': _0x1cbcee(0x217) + _0x1cbcee(0x1a0) + _0x1cbcee(0x213),
+            'LYhXN': _0x1cbcee(0x194),
+            'HAiqs': _0x1cbcee(0x2b3) + _0x1cbcee(0x22b) + _0x1cbcee(0x257) + 's.',
+            'WWffs': _0x1cbcee(0x1f9) + _0x1cbcee(0x2bc) + _0x1cbcee(0x2f3) + '..',
+            'rUvfr': _0x1cbcee(0x262) + _0x1cbcee(0x2bb),
+            'Vutvh': _0x1cbcee(0x2a2) + _0x1cbcee(0x2c2) + _0x1cbcee(0x2e2) + _0x1cbcee(0x1dd) + _0x1cbcee(0x1df),
+            'fpKen': _0x1cbcee(0x2b0) + _0x1cbcee(0x218) + _0x1cbcee(0x1b6) + _0x1cbcee(0x236)
+        };
+    console[_0x1cbcee(0x207)](_0x1cbcee(0x1ae) + _0x1cbcee(0x260) + _0x1cbcee(0x1c1)), app[_0x1cbcee(0x26c)](-0xb07 + -0x3 * 0x211 + 0x1cf2, () => {
+        const _0x3ea6ca = _0x1cbcee;
+        console[_0x3ea6ca(0x207)](_0x33074a[_0x3ea6ca(0x244)]);
     });
-  }
-});
-
-client.login(process.env.TOKEN);
+    const _0x534e42 = [
+            new SlashCommandBuilder()[_0x1cbcee(0x16d)](_0x33074a[_0x1cbcee(0x28c)])[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x33074a[_0x1cbcee(0x281)])[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x3b3cd2 => _0x3b3cd2[_0x1cbcee(0x16d)](_0x1cbcee(0x221))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x237) + _0x1cbcee(0x222))[_0x1cbcee(0x265) + 'd'](!![]))[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x22925d => _0x22925d[_0x1cbcee(0x16d)](_0x1cbcee(0x193))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x180) + _0x1cbcee(0x2b4))[_0x1cbcee(0x265) + 'd'](!![]))[_0x1cbcee(0x18d) + _0x1cbcee(0x209)](_0x10387 => _0x10387[_0x1cbcee(0x16d)](_0x1cbcee(0x204))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x184) + _0x1cbcee(0x1d0) + _0x1cbcee(0x222))[_0x1cbcee(0x265) + 'd'](!![]))[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x7828c9 => _0x7828c9[_0x1cbcee(0x16d)](_0x1cbcee(0x227))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x1d1) + _0x1cbcee(0x2cf) + _0x1cbcee(0x241))[_0x1cbcee(0x265) + 'd'](![]))[_0x1cbcee(0x26f) + _0x1cbcee(0x27c)](_0x4732a7 => _0x4732a7[_0x1cbcee(0x16d)](_0x1cbcee(0x24a))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x1f3) + _0x1cbcee(0x189) + _0x1cbcee(0x191) + _0x1cbcee(0x22f) + _0x1cbcee(0x1ec))[_0x1cbcee(0x265) + 'd'](![])),
+            new SlashCommandBuilder()[_0x1cbcee(0x16d)](_0x33074a[_0x1cbcee(0x2cd)])[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x33074a[_0x1cbcee(0x25c)])[_0x1cbcee(0x1fe) + _0x1cbcee(0x209)](_0x5051d5 => _0x5051d5[_0x1cbcee(0x16d)](_0x1cbcee(0x253))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x19e) + _0x1cbcee(0x1c5) + _0x1cbcee(0x2e0) + 'r.')[_0x1cbcee(0x265) + 'd'](!![])[_0x1cbcee(0x19b) + 'e'](-0x2 * 0x128f + -0x2 * -0x7c5 + 0x2f1 * 0x8)),
+            new SlashCommandBuilder()[_0x1cbcee(0x16d)](_0x33074a[_0x1cbcee(0x248)])[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x33074a[_0x1cbcee(0x267)])[_0x1cbcee(0x1ea) + _0x1cbcee(0x27c)](_0x222a1e => _0x222a1e[_0x1cbcee(0x16d)](_0x1cbcee(0x1e7))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x2e4) + _0x1cbcee(0x2a3) + _0x1cbcee(0x16a) + _0x1cbcee(0x17a))[_0x1cbcee(0x265) + 'd'](!![]))[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x49eb2f => _0x49eb2f[_0x1cbcee(0x16d)](_0x1cbcee(0x2cb))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x25b) + _0x1cbcee(0x216) + _0x1cbcee(0x1bd) + _0x1cbcee(0x29a) + _0x1cbcee(0x258) + ').')[_0x1cbcee(0x265) + 'd'](!![]))[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x34efeb => _0x34efeb[_0x1cbcee(0x16d)](_0x1cbcee(0x21d))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x214) + _0x1cbcee(0x25d) + '.')[_0x1cbcee(0x265) + 'd'](![])),
+            new SlashCommandBuilder()[_0x1cbcee(0x16d)](_0x33074a[_0x1cbcee(0x266)])[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x33074a[_0x1cbcee(0x27f)])[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x17011d => _0x17011d[_0x1cbcee(0x16d)](_0x1cbcee(0x193))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x263) + _0x1cbcee(0x166) + _0x1cbcee(0x27b) + _0x1cbcee(0x28f))[_0x1cbcee(0x265) + 'd'](!![]))[_0x1cbcee(0x18d) + _0x1cbcee(0x209)](_0xbb7298 => _0xbb7298[_0x1cbcee(0x16d)](_0x1cbcee(0x204))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x1b4) + _0x1cbcee(0x168) + _0x1cbcee(0x24f) + _0x1cbcee(0x188))[_0x1cbcee(0x265) + 'd'](!![])),
+            new SlashCommandBuilder()[_0x1cbcee(0x16d)](_0x33074a[_0x1cbcee(0x22e)])[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x33074a[_0x1cbcee(0x1f4)])[_0x1cbcee(0x2a4) + _0x1cbcee(0x294)](_0x4a5505 => _0x4a5505[_0x1cbcee(0x16d)](_0x1cbcee(0x18c))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x197) + _0x1cbcee(0x245) + _0x1cbcee(0x2b1) + _0x1cbcee(0x1cb) + _0x1cbcee(0x249))[_0x1cbcee(0x265) + 'd'](!![])[_0x1cbcee(0x252)]({
+                'name': _0x1cbcee(0x242),
+                'value': _0x1cbcee(0x242)
+            }, {
+                'name': _0x1cbcee(0x1a5),
+                'value': _0x1cbcee(0x2ed)
+            }, {
+                'name': _0x1cbcee(0x1c8) + 'be',
+                'value': _0x1cbcee(0x185)
+            }, {
+                'name': _0x1cbcee(0x2d8),
+                'value': _0x1cbcee(0x26b)
+            })),
+            new SlashCommandBuilder()[_0x1cbcee(0x16d)](_0x33074a[_0x1cbcee(0x1de)])[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x33074a[_0x1cbcee(0x295)])[_0x1cbcee(0x1fe) + _0x1cbcee(0x209)](_0x34ab89 => _0x34ab89[_0x1cbcee(0x16d)](_0x1cbcee(0x2e3))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x29b) + _0x1cbcee(0x280) + _0x1cbcee(0x289))[_0x1cbcee(0x265) + 'd'](![]))[_0x1cbcee(0x1fe) + _0x1cbcee(0x209)](_0x5a1a52 => _0x5a1a52[_0x1cbcee(0x16d)](_0x1cbcee(0x253))[_0x1cbcee(0x26a) + _0x1cbcee(0x2aa)](_0x1cbcee(0x239) + _0x1cbcee(0x23d) + _0x1cbcee(0x1e6) + _0x1cbcee(0x177))[_0x1cbcee(0x265) + 'd'](![])[_0x1cbcee(0x1a9) + 'e'](0x2b * 0x65 + 0x4a2 * 0x8 + 0x6 * -0x901)[_0x1cbcee(0x19b) + 'e'](-0x12fd * -0x1 + -0x6f9 + -0xba0))
+        ], _0x1db54c = new REST({ 'version': '10' })[_0x1cbcee(0x1a8)](process[_0x1cbcee(0x1c6)][_0x1cbcee(0x21c)]);
+    try {
+        console[_0x1cbcee(0x207)](_0x33074a[_0x1cbcee(0x28e)]), await _0x1db54c[_0x1cbcee(0x205)](Routes[_0x1cbcee(0x25f) + _0x1cbcee(0x1f6) + _0x1cbcee(0x1e8)](client[_0x1cbcee(0x17c)]['id'], _0x33074a[_0x1cbcee(0x20a)]), { 'body': _0x534e42 }), console[_0x1cbcee(0x207)](_0x33074a[_0x1cbcee(0x165)]);
+    } catch (_0x28177c) {
+        console[_0x1cbcee(0x27a)](_0x33074a[_0x1cbcee(0x255)], _0x28177c);
+    }
+}), client['on'](_0x1544b9(0x224) + _0x1544b9(0x2d7), async _0x12e62f => {
+    const _0xce88ad = _0x1544b9, _0x3c8ccf = {
+            'xvKcB': function (_0x42288c, _0x3ad427) {
+                return _0x42288c !== _0x3ad427;
+            },
+            'eJNhk': _0xce88ad(0x194),
+            'aXPkd': _0xce88ad(0x1d8) + _0xce88ad(0x1d7) + _0xce88ad(0x283) + _0xce88ad(0x18b) + _0xce88ad(0x2e7),
+            'rHVAv': function (_0x164e37, _0x3dd477) {
+                return _0x164e37 === _0x3dd477;
+            },
+            'QyCEK': _0xce88ad(0x2c3),
+            'Vgxko': _0xce88ad(0x221),
+            'bWsnC': _0xce88ad(0x193),
+            'dYpVI': _0xce88ad(0x227),
+            'JGIPm': _0xce88ad(0x204),
+            'WNaeY': _0xce88ad(0x24a),
+            'tYSGI': _0xce88ad(0x2ef) + _0xce88ad(0x1d5) + _0xce88ad(0x243) + _0xce88ad(0x22c) + _0xce88ad(0x1a7) + _0xce88ad(0x233),
+            'guDCT': _0xce88ad(0x230),
+            'VudKE': _0xce88ad(0x29c) + _0xce88ad(0x2d4) + _0xce88ad(0x2c5),
+            'zDSLg': _0xce88ad(0x1b2) + _0xce88ad(0x1a2) + _0xce88ad(0x2c0),
+            'wjAlm': _0xce88ad(0x1f2) + _0xce88ad(0x20c) + _0xce88ad(0x21e) + 'd.',
+            'FkDll': function (_0xf872c6, _0x36a108) {
+                return _0xf872c6 === _0x36a108;
+            },
+            'sDtdO': _0xce88ad(0x2c4),
+            'fGJrP': _0xce88ad(0x253),
+            'ijWge': _0xce88ad(0x1e3) + _0xce88ad(0x25a),
+            'fTEfK': _0xce88ad(0x2ea) + _0xce88ad(0x179) + _0xce88ad(0x2d0),
+            'yueoy': _0xce88ad(0x1f2) + _0xce88ad(0x264) + _0xce88ad(0x2ce) + _0xce88ad(0x233),
+            'eUegm': function (_0x1b5ca6, _0x28caaa) {
+                return _0x1b5ca6 === _0x28caaa;
+            },
+            'ttXNW': _0xce88ad(0x19c),
+            'rYLsF': _0xce88ad(0x1e7),
+            'XUZHS': _0xce88ad(0x2cb),
+            'PgSsp': _0xce88ad(0x21d),
+            'OXbUs': _0xce88ad(0x1a1) + _0xce88ad(0x28a) + _0xce88ad(0x26d),
+            'Bfdtz': _0xce88ad(0x1cc) + _0xce88ad(0x1ba) + _0xce88ad(0x2c7) + _0xce88ad(0x19a) + _0xce88ad(0x1ac) + _0xce88ad(0x170) + _0xce88ad(0x2da) + '\x27.',
+            'Kinlf': function (_0x3ddf32, _0x591a1c) {
+                return _0x3ddf32(_0x591a1c);
+            },
+            'RaWrx': _0xce88ad(0x1d3),
+            'ETzoe': function (_0x47e21e, _0x38d610) {
+                return _0x47e21e * _0x38d610;
+            },
+            'ZYXKV': _0xce88ad(0x219),
+            'YVXgD': function (_0x52467c, _0x48e9fe) {
+                return _0x52467c * _0x48e9fe;
+            },
+            'zVkfh': _0xce88ad(0x2eb),
+            'HYTMt': function (_0xc20351, _0x143eb5) {
+                return _0xc20351 * _0x143eb5;
+            },
+            'pdGsZ': function (_0x162460, _0x4001d8) {
+                return _0x162460 * _0x4001d8;
+            },
+            'IqokI': function (_0x35c641, _0x1218fe) {
+                return _0x35c641 * _0x1218fe;
+            },
+            'DSZqb': _0xce88ad(0x288) + _0xce88ad(0x2a9) + _0xce88ad(0x186),
+            'zBPPB': _0xce88ad(0x1f2) + _0xce88ad(0x2de) + _0xce88ad(0x247) + _0xce88ad(0x2ec),
+            'wseVD': function (_0x1d368e, _0x4d76d4) {
+                return _0x1d368e === _0x4d76d4;
+            },
+            'yCncq': _0xce88ad(0x169),
+            'ZebFE': _0xce88ad(0x1b2) + _0xce88ad(0x1ab) + _0xce88ad(0x1c7),
+            'LZneq': _0xce88ad(0x1f2) + _0xce88ad(0x20c) + _0xce88ad(0x201) + _0xce88ad(0x2ac),
+            'vTDrU': _0xce88ad(0x18c),
+            'bdNRN': _0xce88ad(0x242),
+            'vcDBb': _0xce88ad(0x2ed),
+            'kGpET': _0xce88ad(0x185),
+            'XYYLF': _0xce88ad(0x26b),
+            'IWOaf': _0xce88ad(0x27d) + _0xce88ad(0x2c7) + _0xce88ad(0x18a) + _0xce88ad(0x220) + _0xce88ad(0x24d) + _0xce88ad(0x296) + '.',
+            'ZCsSw': _0xce88ad(0x29d) + _0xce88ad(0x278),
+            'DoYVD': _0xce88ad(0x176) + _0xce88ad(0x1b5) + _0xce88ad(0x26e),
+            'atYcr': _0xce88ad(0x1f2) + _0xce88ad(0x2ae) + _0xce88ad(0x2a8) + _0xce88ad(0x286),
+            'silMG': function (_0x1578d9, _0xce48fd) {
+                return _0x1578d9 === _0xce48fd;
+            },
+            'YNXyS': _0xce88ad(0x2e3),
+            'jTodk': function (_0x3ba040, _0x37a312) {
+                return _0x3ba040 > _0x37a312;
+            },
+            'RAimA': _0xce88ad(0x22d) + _0xce88ad(0x2cc) + _0xce88ad(0x173) + _0xce88ad(0x1b1) + _0xce88ad(0x1eb) + _0xce88ad(0x231),
+            'bvHfR': function (_0x1accac, _0x1c1031) {
+                return _0x1accac < _0x1c1031;
+            },
+            'FOiYK': _0xce88ad(0x2bf) + _0xce88ad(0x1f0) + _0xce88ad(0x23c) + _0xce88ad(0x291),
+            'lCKhC': function (_0x3ebc82, _0x1b116c) {
+                return _0x3ebc82 > _0x1b116c;
+            },
+            'ouhOU': _0xce88ad(0x2ba) + _0xce88ad(0x292) + _0xce88ad(0x238) + _0xce88ad(0x299),
+            'QfnDq': function (_0x4ab99c, _0x4b589f) {
+                return _0x4ab99c < _0x4b589f;
+            },
+            'NZHDi': function (_0x3e6a76, _0x49fa18) {
+                return _0x3e6a76 + _0x49fa18;
+            },
+            'GHWLy': function (_0x371a31, _0x370fc7) {
+                return _0x371a31 > _0x370fc7;
+            }
+        };
+    if (!_0x12e62f[_0xce88ad(0x24b)]())
+        return;
+    if (!_0x12e62f[_0xce88ad(0x195)][_0xce88ad(0x2b2)][_0xce88ad(0x2df)][_0xce88ad(0x270)](_0x491c3e => _0x491c3e[_0xce88ad(0x1d2)] === _0xce88ad(0x1c9) + 'm') && _0x3c8ccf[_0xce88ad(0x274)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x2ca)]))
+        return _0x12e62f[_0xce88ad(0x16b)]({
+            'content': _0x3c8ccf[_0xce88ad(0x19d)],
+            'ephemeral': !![]
+        });
+    if (_0x3c8ccf[_0xce88ad(0x17e)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x27e)])) {
+        const _0x508f04 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x22a)]), _0x55382d = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x2b9)]), _0x1a5218 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x254)]), _0x71dbd7 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x18f)](_0x3c8ccf[_0xce88ad(0x282)]), _0xc6775c = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1ff)](_0x3c8ccf[_0xce88ad(0x2b7)]);
+        if (!_0x71dbd7 || !_0x71dbd7[_0xce88ad(0x2ab) + 'd']())
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x279)],
+                'ephemeral': !![]
+            });
+        const _0x3e5b53 = new EmbedBuilder()[_0xce88ad(0x2ee)](_0x508f04)[_0xce88ad(0x26a) + _0xce88ad(0x2aa)](_0x55382d)[_0xce88ad(0x1ce)](_0x3c8ccf[_0xce88ad(0x268)]);
+        _0x1a5218 && _0x3e5b53[_0xce88ad(0x2b5)](_0x1a5218);
+        let _0x527023 = '';
+        _0xc6775c && (_0x527023 += _0xce88ad(0x181) + _0xc6775c['id'] + '>');
+        try {
+            await _0x71dbd7[_0xce88ad(0x2f0)]({
+                'embeds': [_0x3e5b53],
+                'content': _0x527023
+            }), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x1be)],
+                'ephemeral': !![]
+            });
+        } catch (_0x1fd156) {
+            console[_0xce88ad(0x27a)](_0x3c8ccf[_0xce88ad(0x24e)], _0x1fd156), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x228)],
+                'ephemeral': !![]
+            });
+        }
+    }
+    if (_0x3c8ccf[_0xce88ad(0x29e)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x211)])) {
+        const _0x2cbde9 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x276)](_0x3c8ccf[_0xce88ad(0x2e6)]);
+        try {
+            const _0x16a644 = await _0x12e62f[_0xce88ad(0x1bb)][_0xce88ad(0x1b9)](_0x2cbde9, !![]);
+            _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0xce88ad(0x2c9) + _0x16a644[_0xce88ad(0x23a)] + (_0xce88ad(0x1f7) + '!'),
+                'ephemeral': !![]
+            });
+            const _0x50f9ee = await _0x12e62f[_0xce88ad(0x234)][_0xce88ad(0x192)][_0xce88ad(0x1f8)](_0x3c8ccf[_0xce88ad(0x1fc)]);
+            _0x50f9ee[_0xce88ad(0x2f0)](_0xce88ad(0x2a1) + _0xce88ad(0x298) + _0x16a644[_0xce88ad(0x23a)] + (_0xce88ad(0x1f7) + _0xce88ad(0x2af)) + _0x12e62f[_0xce88ad(0x1bb)][_0xce88ad(0x1d2)] + '.');
+        } catch (_0x1429ab) {
+            console[_0xce88ad(0x27a)](_0x3c8ccf[_0xce88ad(0x1a6)], _0x1429ab), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x29f)],
+                'ephemeral': !![]
+            });
+        }
+    }
+    if (_0x3c8ccf[_0xce88ad(0x1d9)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x20d)])) {
+        const _0x17bc6a = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x182)](_0x3c8ccf[_0xce88ad(0x2f1)]), _0x482611 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x2e8)]), _0xaeb055 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x1d4)]) || _0x3c8ccf[_0xce88ad(0x229)], _0x4b3801 = _0x482611[_0xce88ad(0x269)](/^(\d+)\s*(min|hora|dia)s?$/i);
+        if (!_0x4b3801)
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x261)],
+                'ephemeral': !![]
+            });
+        const _0x1cb9f6 = _0x3c8ccf[_0xce88ad(0x1fb)](parseInt, _0x4b3801[-0x124 * -0x11 + -0x12d6 + -0x2f * 0x3]), _0x251054 = _0x4b3801[0xd6c + -0x1939 + -0xbcf * -0x1][_0xce88ad(0x240) + 'e']();
+        let _0x4f1943;
+        if (_0x3c8ccf[_0xce88ad(0x29e)](_0x251054, _0x3c8ccf[_0xce88ad(0x1c2)]))
+            _0x4f1943 = _0x3c8ccf[_0xce88ad(0x2a5)](_0x3c8ccf[_0xce88ad(0x2a5)](_0x1cb9f6, 0xc3 * 0x7 + 0x11d * 0x1 + -0x636), -0x1 * -0x93b + 0x52 * -0x72 + 0x1f31);
+        else {
+            if (_0x3c8ccf[_0xce88ad(0x17e)](_0x251054, _0x3c8ccf[_0xce88ad(0x2c6)]))
+                _0x4f1943 = _0x3c8ccf[_0xce88ad(0x1c0)](_0x3c8ccf[_0xce88ad(0x2a5)](_0x3c8ccf[_0xce88ad(0x2a5)](_0x1cb9f6, -0x3d * 0x1c + 0x1 * -0x90b + 0xff3), 0x1076 + 0x24eb * 0x1 + -0x3525), 0x1 * 0x1549 + -0x17e7 + 0x686);
+            else
+                _0x3c8ccf[_0xce88ad(0x17e)](_0x251054, _0x3c8ccf[_0xce88ad(0x1d6)]) && (_0x4f1943 = _0x3c8ccf[_0xce88ad(0x1c0)](_0x3c8ccf[_0xce88ad(0x256)](_0x3c8ccf[_0xce88ad(0x235)](_0x3c8ccf[_0xce88ad(0x172)](_0x1cb9f6, -0xf * -0x11a + 0x79 + -0x10e7), -0x1a3f * -0x1 + 0x7 * 0x52f + -0x3e4c), -0x1 * 0x1d6f + 0x2 * -0xbb9 + 0x351d * 0x1), -0x1a1b + -0xf2 * -0x19 + -0x1 * -0x661));
+        }
+        try {
+            const _0x1047e6 = await _0x12e62f[_0xce88ad(0x234)][_0xce88ad(0x1b7)][_0xce88ad(0x1f8)](_0x17bc6a['id']);
+            await _0x1047e6[_0xce88ad(0x19c)](_0x4f1943, _0xaeb055), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0xce88ad(0x2b8) + _0xce88ad(0x1ef) + _0xce88ad(0x1f5) + _0x17bc6a[_0xce88ad(0x297)] + _0xce88ad(0x23e) + _0x1cb9f6 + '\x20' + _0x251054 + (_0xce88ad(0x293) + ':\x20') + _0xaeb055,
+                'ephemeral': !![]
+            });
+            const _0x1f02f0 = await _0x12e62f[_0xce88ad(0x234)][_0xce88ad(0x192)][_0xce88ad(0x1f8)](_0x3c8ccf[_0xce88ad(0x1fc)]);
+            _0x1f02f0[_0xce88ad(0x2f0)](_0x17bc6a[_0xce88ad(0x297)] + (_0xce88ad(0x277) + _0xce88ad(0x20b) + _0xce88ad(0x2c8)) + _0x1cb9f6 + '\x20' + _0x251054 + (_0xce88ad(0x293) + ':\x20') + _0xaeb055 + '.');
+        } catch (_0x5f5641) {
+            console[_0xce88ad(0x27a)](_0x3c8ccf[_0xce88ad(0x1cf)], _0x5f5641), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x1cd)],
+                'ephemeral': !![]
+            });
+        }
+    }
+    if (_0x3c8ccf[_0xce88ad(0x2d9)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x1fd)])) {
+        const _0xe32f2b = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x2b9)]), _0x2fd19e = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x18f)](_0x3c8ccf[_0xce88ad(0x282)]);
+        if (!_0x2fd19e || !_0x2fd19e[_0xce88ad(0x2ab) + 'd']())
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x279)],
+                'ephemeral': !![]
+            });
+        try {
+            await _0x2fd19e[_0xce88ad(0x2f0)](_0xe32f2b), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0xce88ad(0x2e5) + _0xce88ad(0x17d) + _0xce88ad(0x190) + _0xce88ad(0x215) + 'l\x20' + _0x2fd19e[_0xce88ad(0x1d2)] + '!',
+                'ephemeral': !![]
+            });
+            const _0x21f49d = await _0x12e62f[_0xce88ad(0x234)][_0xce88ad(0x192)][_0xce88ad(0x1f8)](_0x3c8ccf[_0xce88ad(0x1fc)]);
+            _0x21f49d[_0xce88ad(0x2f0)](_0xce88ad(0x2e5) + _0xce88ad(0x200) + _0xce88ad(0x21f) + _0x2fd19e['id'] + _0xce88ad(0x21b) + _0xe32f2b);
+        } catch (_0x3efef8) {
+            console[_0xce88ad(0x27a)](_0x3c8ccf[_0xce88ad(0x1e4)], _0x3efef8), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x208)],
+                'ephemeral': !![]
+            });
+        }
+    }
+    if (_0x3c8ccf[_0xce88ad(0x17e)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x18e)])) {
+        const _0x54e0f3 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x1c4)](_0x3c8ccf[_0xce88ad(0x18e)]);
+        if (![
+                _0x3c8ccf[_0xce88ad(0x2ad)],
+                _0x3c8ccf[_0xce88ad(0x17f)],
+                _0x3c8ccf[_0xce88ad(0x250)],
+                _0x3c8ccf[_0xce88ad(0x1b0)]
+            ][_0xce88ad(0x17b)](_0x54e0f3))
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x2d3)],
+                'ephemeral': !![]
+            });
+        try {
+            client[_0xce88ad(0x17c)][_0xce88ad(0x178) + 'e']({
+                'status': _0x54e0f3,
+                'activities': [{
+                        'name': _0x3c8ccf[_0xce88ad(0x287)],
+                        'type': 0x0
+                    }]
+            }), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0xce88ad(0x1aa) + _0xce88ad(0x23f) + _0xce88ad(0x206) + _0x54e0f3 + '!',
+                'ephemeral': !![]
+            });
+        } catch (_0xb531a7) {
+            console[_0xce88ad(0x27a)](_0x3c8ccf[_0xce88ad(0x2e9)], _0xb531a7), _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x2bd)],
+                'ephemeral': !![]
+            });
+        }
+    }
+    if (_0x3c8ccf[_0xce88ad(0x273)](_0x12e62f[_0xce88ad(0x2d1) + 'e'], _0x3c8ccf[_0xce88ad(0x2ca)])) {
+        const _0x3f3a20 = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x276)](_0x3c8ccf[_0xce88ad(0x1fa)]) || -0x4 * 0x509 + 0x3 * 0xc6b + -0x1109, _0x2d94aa = _0x12e62f[_0xce88ad(0x246)][_0xce88ad(0x276)](_0x3c8ccf[_0xce88ad(0x2e6)]) || -0x306 * -0xa + -0x1bd3 + 0x58 * -0x7;
+        if (_0x3c8ccf[_0xce88ad(0x2a6)](_0x3f3a20, -0x1 * 0x2fb + 0x174e + -0x13ef))
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x1a3)],
+                'ephemeral': !![]
+            });
+        if (_0x3c8ccf[_0xce88ad(0x1bc)](_0x2d94aa, 0x261 * -0x7 + 0x241a + -0x1372))
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x225)],
+                'ephemeral': !![]
+            });
+        if (_0x3c8ccf[_0xce88ad(0x16c)](_0x2d94aa, -0xa0 + -0x834 + -0x76 * -0x14))
+            return _0x12e62f[_0xce88ad(0x16b)]({
+                'content': _0x3c8ccf[_0xce88ad(0x1e9)],
+                'ephemeral': !![]
+            });
+        let _0x1b4e0e = [], _0x459eca = -0x478 + 0x3 * -0xb7e + -0xa * -0x3e5;
+        for (let _0x451a6c = -0x231d + 0x23e7 * 0x1 + -0xca; _0x3c8ccf[_0xce88ad(0x210)](_0x451a6c, _0x2d94aa); _0x451a6c++) {
+            const _0x554be7 = _0x3c8ccf[_0xce88ad(0x1f1)](Math[_0xce88ad(0x1ee)](_0x3c8ccf[_0xce88ad(0x256)](Math[_0xce88ad(0x1da)](), _0x3f3a20)), 0x15c6 + 0x145 + -0x170a);
+            _0x1b4e0e[_0xce88ad(0x1ca)](_0x554be7), _0x459eca += _0x554be7;
+        }
+        const _0x2f1814 = await _0x12e62f[_0xce88ad(0x234)][_0xce88ad(0x1b7)][_0xce88ad(0x1f8)](_0x12e62f[_0xce88ad(0x17c)]['id']), _0x8e8136 = _0x2f1814[_0xce88ad(0x1c3)] || _0x12e62f[_0xce88ad(0x17c)][_0xce88ad(0x25e)];
+        let _0x4b0d31 = _0x8e8136 + _0xce88ad(0x20e) + _0x2d94aa + (_0xce88ad(0x285) + 'e\x20') + _0x3f3a20 + (_0xce88ad(0x174) + _0xce88ad(0x1e5) + _0xce88ad(0x2db)) + _0x1b4e0e[_0xce88ad(0x223)](',\x20');
+        _0x3c8ccf[_0xce88ad(0x1bf)](_0x2d94aa, -0x1c * 0x142 + 0x3 * 0x4d7 + -0xa * -0x212) && (_0x4b0d31 += _0xce88ad(0x20f) + _0xce88ad(0x203) + _0x459eca), _0x12e62f[_0xce88ad(0x16b)]({
+            'content': _0x4b0d31,
+            'ephemeral': ![]
+        });
+    }
+}), client[_0x1544b9(0x212)](process[_0x1544b9(0x1c6)][_0x1544b9(0x21c)]);
